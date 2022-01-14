@@ -28,7 +28,7 @@ def plot_hist(img, chan=None, xlims=(0, 1), cumul=False, vlines=None):
 def resize_by_nrows(img, nrows):
     img_resized = transform.resize(
         img, 
-        (nrows, img.shape[1] * nrows / img.shape[0]), 
+        (nrows, img.shape[1] * nrows // img.shape[0]), 
         anti_aliasing=True
     )
     return img_resized
@@ -43,10 +43,26 @@ def resize_by_img(img_to_resize, img_to_match):
     )
     return img_resized
 
+def pink_like(img, dtype=np.ubyte):
+    pink = np.zeros_like(img, dtype=dtype)
+    # Assign RGB values corresponding to pink image
+    pink[:, :, 0] = 252
+    pink[:, :, 1] = 231
+    pink[:, :, 2] = 234
+    return pink
+
+def pink(img_size, dtype=np.ubyte):
+    pink = np.zeros(img_size, dtype=dtype)
+    # Assign RGB values corresponding to pink image
+    pink[:, :, 0] = 252
+    pink[:, :, 1] = 231
+    pink[:, :, 2] = 234
+    return pink
+
 def tesselate(img, canvas_size=(1080, 1920, 3)):
     canvas = np.zeros(canvas_size)
-    nrows, ncols, nchans = img.shape
     img_resized = resize_by_nrows(img, canvas_size[0])
+    nrows, ncols, nchans = img_resized.shape
     print(img_resized.shape)
     ntiles = canvas_size[1] // nrows + 1
     for i in range(1, ntiles):
