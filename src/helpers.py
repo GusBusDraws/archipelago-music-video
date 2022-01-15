@@ -2,9 +2,14 @@ from pathlib import Path
 
 import imageio as iio
 import matplotlib.pyplot as plt
+import napari
 import numpy as np
 from skimage import exposure, transform
 
+
+def view(viewer: napari.Viewer(), img, name=None):
+    viewer.add_image(img, name=name)
+    return napari.utils.nbscreenshot(viewer, canvas_only=True)
 
 def plot_hist(img, chan=None, xlims=(0, 1), cumul=False, vlines=None):
     fig, ax = plt.subplots()
