@@ -4,7 +4,7 @@ import imageio as iio
 import matplotlib.pyplot as plt
 import napari
 import numpy as np
-from skimage import exposure, transform
+from skimage import color, exposure, transform
 
 
 def view(viewer: napari.Viewer(), img, name=None):
@@ -48,20 +48,26 @@ def resize_by_img(img_to_resize, img_to_match):
     )
     return img_resized
 
-def pink_like(img, dtype=np.ubyte):
+def pink_like(img, img_type='rgb', dtype=np.ubyte):
     pink = np.zeros_like(img, dtype=dtype)
     # Assign RGB values corresponding to pink image
     pink[:, :, 0] = 252
     pink[:, :, 1] = 231
     pink[:, :, 2] = 234
+    if img_type == 'hsv':
+        pink_hsv = color.rgb2hsv(pink)
+        return pink_hsv
     return pink
 
-def pink(img_size, dtype=np.ubyte):
+def pink(img_size, img_type='rgb', dtype=np.ubyte):
     pink = np.zeros(img_size, dtype=dtype)
     # Assign RGB values corresponding to pink image
     pink[:, :, 0] = 252
     pink[:, :, 1] = 231
     pink[:, :, 2] = 234
+    if img_type == 'hsv':
+        pink_hsv = color.rgb2hsv(pink)
+        return pink_hsv
     return pink
 
 def tesselate(img, canvas_size=(1080, 1920, 3)):
